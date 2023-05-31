@@ -31,7 +31,8 @@ fn main_OLD() {
 
 fn main() {
     let env_args: Vec<String> = env::args().collect();
-    let config: Config = Config::build(&env_args).unwrap_or_else(|err| {
+    let ignore_case = env::var("IGNORE_CASE").is_ok();
+    let config: Config = Config::build(&env_args, ignore_case).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {err}");
         process::exit(1);
     });
