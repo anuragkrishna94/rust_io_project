@@ -33,6 +33,32 @@ impl Config {
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
      let file_data = fs::read_to_string(config.file_path)?;
-     println!("With text: \n {file_data}");
+     for line in search(&config.query, &file_data) {
+          println!("{line}");
+     }
      Ok(())
- }
+}
+
+// REturned vector should contain string slices that reference slices of the arument `contents`
+// Data returned will live as long as data passed into `contents`
+pub fn search<'a>(query: & str, contents: &'a str) -> Vec<&'a str> {
+     let mut results = Vec::new();
+     for line in contents.lines() {
+          if line.contains(query) {
+               results.push(line);
+          }
+     }
+     results
+}
+
+#[cfg(test)]
+mod tests {
+     use super::*;
+
+     #[test]
+     fn one_result() {
+          let query = "duct";
+          let contents = "\nRust:\nsafe, fast, productive.\nPick three.";
+          assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+     }
+}
