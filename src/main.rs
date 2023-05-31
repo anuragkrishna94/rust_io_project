@@ -33,7 +33,7 @@ fn main() {
     let env_args: Vec<String> = env::args().collect();
     let ignore_case = env::var("IGNORE_CASE").is_ok();
     let config: Config = Config::build(&env_args, ignore_case).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {err}");
+        eprintln!("Problem parsing arguments: {err}");
         process::exit(1);
     });
 
@@ -42,7 +42,7 @@ fn main() {
 
     // `unwrap_or_else()` is not required here as `Ok(())` is of no use.
     if let Err(e) = run(config) {
-        println!("Application Error: {e}");
+        eprintln!("Application Error: {e}");
         process::exit(1);
     }
 
